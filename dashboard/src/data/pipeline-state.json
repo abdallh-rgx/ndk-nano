@@ -3,7 +3,7 @@
     "ndk_version": "r27c",
     "abi": "arm64-v8a",
     "host": "linux-x86_64",
-    "generated_at": "2026-11-16T05:15:26.713316+00:00",
+    "generated_at": "2026-11-16T05:57:54.632012+00:00",
     "source": "local"
   },
   "stages": {
@@ -13,8 +13,8 @@
     },
     "prune": {
       "before_mb": 1958.6,
-      "after_mb": 309.79,
-      "removed_files": 4924,
+      "after_mb": 310.83,
+      "removed_files": 4928,
       "stripped_binaries": 12
     },
     "manifest": {
@@ -84,21 +84,21 @@
         "snprintf"
       ],
       "kept_files": 2,
-      "dropped_files": 293,
-      "bytes_total": 29176548,
-      "bytes_kept_mb": 6.8,
-      "bytes_saved_mb": 21.02,
-      "solve_ms": 35,
-      "greedy_kept_mb": 7.55,
+      "dropped_files": 292,
+      "bytes_total": 30796568,
+      "bytes_kept_mb": 8.38,
+      "bytes_saved_mb": 20.99,
+      "solve_ms": 34,
+      "greedy_kept_mb": 9.13,
       "asm_rules_verified": true,
       "asm_rules_occurrences": 0,
       "asm_est_bytes_saved": 0
     },
     "pack": {
       "format": "xz",
-      "package_mb": 55.8,
-      "tailored_mb": 50.12,
-      "ratio": 5.55,
+      "package_mb": 56.13,
+      "tailored_mb": 50.62,
+      "ratio": 5.54,
       "budget_mb": 300,
       "within_budget": true
     },

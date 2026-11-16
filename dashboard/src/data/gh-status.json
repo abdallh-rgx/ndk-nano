@@ -2,16 +2,21 @@
   "repo": {
     "stars": 0,
     "html_url": "https://github.com/abdallh-rgx/ndk-nano",
-    "pushed_at": "2026-11-16T05:15:48Z"
+    "pushed_at": "2026-11-16T06:06:01Z"
   },
   "latest_run": {
-    "status": "in_progress",
-    "conclusion": null,
-    "html_url": "https://github.com/abdallh-rgx/ndk-nano/actions/runs/43809082093",
-    "created_at": "2026-11-16T05:15:50Z",
-    "head_sha": "022cc32"
+    "status": "completed",
+    "conclusion": "success",
+    "html_url": "https://github.com/abdallh-rgx/ndk-nano/actions/runs/43813608655",
+    "created_at": "2026-11-16T05:57:58Z",
+    "head_sha": "f581d0d"
   },
-  "latest_release": null,
-  "cached_at": "2026-11-16T05:16:05.330847+00:00",
+  "latest_release": {
+    "tag": "nightly-f581d0d",
+    "asset_name": "ndk-nano-r27c-linux-arm64-tailored.tar.xz",
+    "asset_mb": 50.6,
+    "html_url": "https://github.com/abdallh-rgx/ndk-nano/releases/tag/nightly-f581d0d"
+  },
+  "cached_at": "2026-11-16T06:09:04.060215+00:00",
   "error": null
 }

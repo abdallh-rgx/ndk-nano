@@ -49,10 +49,13 @@ export async function GET(_request: NextRequest) {
     }
   };
 
-  const [repoJson, runsJson, releaseJson] = await Promise.all([
+  const [repoJson, runsJson, releaseJson, releasesListJson] = await Promise.all([
     fetchJson(`${GH_API}/repos/${GH_REPO}`),
     fetchJson(`${GH_API}/repos/${GH_REPO}/actions/runs?per_page=1`),
     fetchJson(`${GH_API}/repos/${GH_REPO}/releases/latest`),
+    // /releases/latest excludes prereleases; the pipeline publishes nightly
+    // prereleases, so fall back to the newest entry of the list endpoint.
+    fetchJson(`${GH_API}/repos/${GH_REPO}/releases?per_page=1`),
   ]);
 
   const repoData = repoJson as
@@ -68,7 +71,7 @@ export async function GET(_request: NextRequest) {
         head_sha?: string;
       }
     | null;
-  const releaseData = releaseJson as
+  const releaseData = (releaseJson ?? (releasesListJson as unknown[] | null)?.[0] ?? null) as
     | {
         tag_name?: string;
         html_url?: string;
