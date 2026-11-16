@@ -1,0 +1,19 @@
+{
+  "mode": "direct",
+  "projects": [
+    {
+      "name": "hello-jni",
+      "status": "fail",
+      "artifact": "/home/z/ndk-nano/work/verify/full/hello-jni/libhello-jni.so",
+      "machine": "",
+      "tree": "full"
+    },
+    {
+      "name": "mathlib",
+      "status": "fail",
+      "artifact": "/home/z/ndk-nano/work/verify/full/mathlib/libmathx.so",
+      "machine": "",
+      "tree": "full"
+    }
+  ]
+}

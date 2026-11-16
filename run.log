@@ -1,0 +1,60 @@
+[run_all] SKIP_FETCH=1: assuming /home/z/ndk-nano/work/ndk already exists
+[prune] resetting /home/z/ndk-nano/dist
+[prune] copying /home/z/ndk-nano/work/ndk -> /home/z/ndk-nano/dist/ndk-nano (hardlinks)
+[prune] hardlink copy OK
+[prune] before: 2053740638 bytes, 8675 files
+[prune] removing non-kept triple dir: toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/x86_64-linux-android
+[prune] removing non-kept triple dir: toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/i686-linux-android
+[prune] removing non-kept triple dir: toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/arm-linux-androideabi
+[prune] removed non-kept wrapper binaries in bin/
+[prune] minimal profile: removed 125 non-essential tools from bin/
+[prune] removing clang runtime target dir: toolchains/llvm/prebuilt/linux-x86_64/lib/clang/18/lib/arm-unknown-linux-musleabihf
+[prune] removing clang runtime target dir: toolchains/llvm/prebuilt/linux-x86_64/lib/clang/18/lib/i386-unknown-linux-gnu
+[prune] removing clang runtime target dir: toolchains/llvm/prebuilt/linux-x86_64/lib/clang/18/lib/aarch64-unknown-linux-musl
+[prune] removing clang runtime target dir: toolchains/llvm/prebuilt/linux-x86_64/lib/clang/18/lib/x86_64-unknown-linux-musl
+[prune] removing clang runtime target dir: toolchains/llvm/prebuilt/linux-x86_64/lib/clang/18/lib/baremetal
+[prune] removing clang runtime target dir: toolchains/llvm/prebuilt/linux-x86_64/lib/clang/18/lib/i686-unknown-linux-musl
+[prune] removing clang runtime target dir: toolchains/llvm/prebuilt/linux-x86_64/lib/clang/18/lib/x86_64-unknown-linux-gnu
+[prune] removing clang runtime arch dir: toolchains/llvm/prebuilt/linux-x86_64/lib/clang/18/lib/linux/x86_64
+[prune] removing clang runtime arch dir: toolchains/llvm/prebuilt/linux-x86_64/lib/clang/18/lib/linux/i386
+[prune] removing clang runtime arch dir: toolchains/llvm/prebuilt/linux-x86_64/lib/clang/18/lib/linux/arm
+[prune]   minimal: removed toolchains/llvm/prebuilt/linux-x86_64/lib/clang/18/lib/linux/aarch64/lldb-server
+[prune]   minimal: removed toolchains/llvm/prebuilt/linux-x86_64/lib/clang/18/lib/linux/aarch64/libomp.so
+[prune]   minimal: removed toolchains/llvm/prebuilt/linux-x86_64/lib/clang/18/lib/linux/aarch64/libFuzzer.a
+[prune]   minimal: removed toolchains/llvm/prebuilt/linux-x86_64/lib/clang/18/lib/linux/aarch64/libomp.a
+[prune] removing clang runtime arch dir: toolchains/llvm/prebuilt/linux-x86_64/lib/clang/18/lib/linux/riscv64
+[prune] clang runtime toolchains/llvm/prebuilt/linux-x86_64/lib/clang/18/lib/linux: removed 157 files (profile=minimal)
+[prune] removing toolchain lib dir: arm-unknown-linux-musleabihf
+[prune] removing toolchain lib dir: i386-unknown-linux-gnu
+[prune] removing toolchain lib dir: i686-w64-windows-gnu
+[prune] removing toolchain lib dir: aarch64-unknown-linux-musl
+[prune] removing toolchain lib dir: x86_64-unknown-linux-musl
+[prune] removing toolchain lib dir: x86_64-w64-windows-gnu
+[prune] removing toolchain lib dir: i686-unknown-linux-musl
+[prune] removing toolchain lib dir: x86_64-unknown-linux-gnu
+[prune] minimal profile: removed lldb/host shared libraries from lib/
+[prune] removing simpleperf
+[prune] removing shader-tools
+[prune] removing prebuilt
+[prune] removing sources/third_party/shaderc
+[prune] removing toolchain musl sysroot
+[prune] removing toolchains/llvm/prebuilt/linux-x86_64/python3
+[prune] removing python-packages
+[prune] stripped 12 binaries with llvm-strip
+[prune] after: 354726525 bytes, 3795 files (removed 4880 files)
+[prune] metrics written to /home/z/ndk-nano/data/metrics-prune.json
+[prune] sizes.json written (3809 files)
+[prune] OK: pruned tree at /home/z/ndk-nano/dist/ndk-nano
+[run_all] verify mode: direct
+[run_all] verifying [full] hello-jni ...
+[run_all] verify [full] hello-jni: fail (machine: unknown)
+[run_all] verifying [full] mathlib ...
+[run_all] verify [full] mathlib: fail (machine: unknown)
+[run_all] usage.json: 23 symbols, 8 headers, 3 objects -> /home/z/ndk-nano/data/usage.json
+[manifest] clang: /home/z/ndk-nano/work/ndk/toolchains/llvm/prebuilt/linux-x86_64/bin/clang
+[manifest] target flag: --target=aarch64-linux-android24
+[manifest] header universe: 1695 headers (889 internal/skipped files)
+[manifest] processing 1695 headers with 2 jobs
+[manifest] progress: 100/1695 (1.3s)
+[manifest] progress: 200/1695 (2.6s)
+[manifest] progress: 300/1695 (6.5s)

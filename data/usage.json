@@ -1,0 +1,77 @@
+{
+  "required_symbols": [
+    "_Unwind_Resume",
+    "_ZNSt11logic_errorC2EPKc",
+    "_ZNSt12length_errorD1Ev",
+    "_ZNSt13runtime_errorC1EPKc",
+    "_ZNSt13runtime_errorD1Ev",
+    "_ZNSt20bad_array_new_lengthC1Ev",
+    "_ZNSt20bad_array_new_lengthD1Ev",
+    "_ZTISt12length_error",
+    "_ZTISt13runtime_error",
+    "_ZTISt20bad_array_new_length",
+    "_ZTVSt12length_error",
+    "_ZdlPv",
+    "_Znwm",
+    "__android_log_print",
+    "__cxa_allocate_exception",
+    "__cxa_begin_catch",
+    "__cxa_end_catch",
+    "__cxa_free_exception",
+    "__cxa_throw",
+    "__gxx_personality_v0",
+    "powf",
+    "sinf",
+    "snprintf"
+  ],
+  "required_headers": [
+    "android/log.h",
+    "jni.h",
+    "math.h",
+    "stdexcept",
+    "stdio.h",
+    "string",
+    "string.h",
+    "vector"
+  ],
+  "objects": [
+    {
+      "path": "hello-jni/engine.o",
+      "undefined_symbols": [
+        "_Unwind_Resume",
+        "_ZNSt11logic_errorC2EPKc",
+        "_ZNSt12length_errorD1Ev",
+        "_ZNSt13runtime_errorC1EPKc",
+        "_ZNSt13runtime_errorD1Ev",
+        "_ZNSt20bad_array_new_lengthC1Ev",
+        "_ZNSt20bad_array_new_lengthD1Ev",
+        "_ZTISt12length_error",
+        "_ZTISt13runtime_error",
+        "_ZTISt20bad_array_new_length",
+        "_ZTVSt12length_error",
+        "_ZdlPv",
+        "_Znwm",
+        "__cxa_allocate_exception",
+        "__cxa_begin_catch",
+        "__cxa_end_catch",
+        "__cxa_free_exception",
+        "__cxa_throw",
+        "__gxx_personality_v0"
+      ]
+    },
+    {
+      "path": "hello-jni/main.o",
+      "undefined_symbols": [
+        "__android_log_print",
+        "snprintf"
+      ]
+    },
+    {
+      "path": "mathlib/mathx.o",
+      "undefined_symbols": [
+        "powf",
+        "sinf"
+      ]
+    }
+  ]
+}

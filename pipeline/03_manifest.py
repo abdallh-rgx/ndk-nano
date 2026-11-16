@@ -189,6 +189,9 @@ def process_header(header, include_root, clang, target_flag):
 
 def main():
     args = parse_args()
+    # Resolve to an absolute path: subprocess calls run with cwd=<tmpdir>, so
+    # a relative --ndk would break the clang lookup.
+    args.ndk = os.path.abspath(args.ndk)
 
     include_root = os.path.join(args.ndk, *INCLUDE_REL.split(os.sep))
     clang_path = os.path.join(args.ndk, *CLANG_REL.split(os.sep))

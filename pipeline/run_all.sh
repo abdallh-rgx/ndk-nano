@@ -108,8 +108,10 @@ verify_tree() {
       fi
     fi
     if [ -n "$artifact" ] && [ -f "$artifact" ]; then
+      # NB: llvm-readelf indents header lines with two spaces (unlike GNU
+      # readelf), so the anchor '^Machine:' would never match.
       machine="$("$bin_dir/llvm-readelf" -h "$artifact" 2>/dev/null \
-                 | awk '/^Machine:/{print $2, $3}' || true)"
+                 | awk '$1 == "Machine:" {print $2}' || true)"
       case "$machine" in
         *AArch64*) status="ok" ;;
         *) status="fail" ;;
