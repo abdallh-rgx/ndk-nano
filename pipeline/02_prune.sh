@@ -38,6 +38,7 @@ esac
 TOOLCHAIN="$DST/toolchains/llvm/prebuilt/linux-x86_64"
 SYSROOT="$TOOLCHAIN/sysroot"
 BIN="$TOOLCHAIN/bin"
+ELF_MAGIC="$(printf '\177ELF')"
 
 log "resetting $DIST"
 rm -rf "$DIST" "$PIPE_ROOT/dist-pkg"
@@ -241,13 +242,42 @@ if [ -d "$TOOLCHAIN/lib" ]; then
   done < <(find "$TOOLCHAIN/lib" -mindepth 1 -maxdepth 1 -type d -print0)
 
   if [ "$PROFILE" = "minimal" ]; then
-    # Host-side shared libraries only needed by the removed developer tools.
-    for hostlib in liblldb.so liblldbIntelFeatures.so LLVMPolly.so libxml2.so.2 \
-                   libedit.so.0 libz.so.1; do
-      rm -f "$TOOLCHAIN/lib/$hostlib"
-    done
+    # Keep exactly the host shared libraries that the KEPT bin/ tools need
+    # (computed from their DT_NEEDED entries), drop the rest. This is not a
+    # fixed list on purpose: ld.lld links libxml2.so.2 DYNAMICALLY and the
+    # NDK ships its own copy in lib/ (RUNPATH=$ORIGIN/../lib) precisely so
+    # the toolchain runs on minimal hosts like CI runners - deleting it
+    # breaks every link on hosts without a system libxml2.
+    needed_list="$(mktemp)"
+    while IFS= read -r -d '' f; do
+      [ -f "$f" ] || continue
+      case "$(basename "$f")" in *.a|*.o) continue ;; esac
+      if [ "$(head -c 4 "$f" 2>/dev/null || true)" != "$ELF_MAGIC" ]; then
+        continue
+      fi
+      "$BIN/llvm-readelf" -d "$f" 2>/dev/null \
+        | grep -oP 'Shared library: \[\K[^\]]+' >> "$needed_list" || true
+    done < <(find "$BIN" -maxdepth 1 \( -type f -o -type l \) -print0)
+    sort -u "$needed_list" -o "$needed_list"
+
+    removed_host=0
+    while IFS= read -r -d '' hl; do
+      name="$(basename "$hl")"
+      # Resolve symlinks: keep libxml2.so when libxml2.so.2 is needed.
+      target=""
+      if [ -L "$hl" ]; then
+        target="$(basename "$(readlink "$hl")")"
+      fi
+      if grep -qxF "$name" "$needed_list" \
+         || { [ -n "$target" ] && grep -qxF "$target" "$needed_list"; }; then
+        continue
+      fi
+      rm -f "$hl"
+      removed_host=$((removed_host + 1))
+    done < <(find "$TOOLCHAIN/lib" -mindepth 1 -maxdepth 1 \( -type f -o -type l \) -print0)
+    rm -f "$needed_list"
     rm -rf "$TOOLCHAIN/lib/python3.11"
-    log "minimal profile: removed lldb/host shared libraries from lib/"
+    log "minimal profile: kept host libs per DT_NEEDED closure, removed ${removed_host} others from lib/"
   fi
 fi
 
@@ -291,7 +321,6 @@ fi
 stripped=0
 STRIP="$BIN/llvm-strip"
 if [ -x "$STRIP" ]; then
-  ELF_MAGIC="$(printf '\177ELF')"
   while IFS= read -r -d '' f; do
     [ -f "$f" ] || continue
     [ -x "$f" ] || continue

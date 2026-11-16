@@ -133,6 +133,12 @@ def file_policy(rel, keep_paths, keep_basenames, bin_keep):
             return True
         if base in ("libunwind.a", "libatomic.a"):
             return True
+        # Top-level host shared libraries (incl. versioned .so.N) are runtime
+        # dependencies of the kept compiler/linker binaries (ld.lld needs
+        # libxml2.so.2 on hosts without a system copy).
+        rest = rel[len(TOOLCHAIN_LIB_REL) + 1:]
+        if "/" not in rest and (base.endswith(".so") or ".so." in base):
+            return True
         # clang resource-dir metadata (share/, bin/); include/ is handled above.
         if fnmatch.fnmatch(rel, TOOLCHAIN_REL + "/lib/clang/*/share/*") or \
            fnmatch.fnmatch(rel, TOOLCHAIN_REL + "/lib/clang/*/bin/*"):

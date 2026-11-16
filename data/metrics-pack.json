@@ -2,16 +2,16 @@
   "files": [
     {
       "name": "ndk-nano-r27c-linux-arm64-tailored.tar.xz",
-      "bytes": 52552452
+      "bytes": 53081900
     },
     {
       "name": "ndk-nano-r27c-linux-arm64.tar.xz",
-      "bytes": 58510128
+      "bytes": 58861000
     }
   ],
   "chosen": {
     "name": "ndk-nano-r27c-linux-arm64.tar.xz",
-    "bytes": 58510128,
+    "bytes": 58861000,
     "format": "xz"
   }
 }

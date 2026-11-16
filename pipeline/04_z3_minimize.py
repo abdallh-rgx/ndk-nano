@@ -173,12 +173,13 @@ def is_fixed_lib(rel):
     if base in ("libunwind.a", "libatomic.a"):
         return True
     # Host shared libraries placed directly in the toolchain lib dirs are
-    # runtime dependencies of the clang binaries themselves.
+    # runtime dependencies of the clang binaries themselves (e.g. ld.lld
+    # links libxml2.so.2 dynamically). Versioned names like .so.2 count.
     for host_lib in ("toolchains/llvm/prebuilt/linux-x86_64/lib",
                      "toolchains/llvm/prebuilt/linux-x86_64/lib64"):
         if rel.startswith(host_lib + "/"):
             rest = rel[len(host_lib) + 1:]
-            if "/" not in rest and rest.endswith(".so"):
+            if "/" not in rest and (rest.endswith(".so") or ".so." in rest):
                 return True
     return False
 

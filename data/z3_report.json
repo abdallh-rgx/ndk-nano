@@ -41,7 +41,7 @@
   "uncovered_symbols": [],
   "kept_files": [
     {
-      "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/aarch64-linux-android/29/liblog.so",
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/aarch64-linux-android/28/liblog.so",
       "bytes": 12280
     },
     {
@@ -49,13 +49,13 @@
       "bytes": 1794776
     }
   ],
-  "dropped_files": 293,
-  "bytes_total": 29176548,
-  "bytes_kept": 7135520,
-  "bytes_saved": 22041028,
-  "solve_ms": 35,
+  "dropped_files": 292,
+  "bytes_total": 30796568,
+  "bytes_kept": 8787200,
+  "bytes_saved": 22009368,
+  "solve_ms": 34,
   "greedy": {
-    "bytes_kept": 7917496
+    "bytes_kept": 9569176
   },
   "fixed_files": [
     {
@@ -71,8 +71,8 @@
       "bytes": 488484
     },
     {
-      "path": "toolchains/llvm/prebuilt/linux-x86_64/lib/libRemarks.so",
-      "bytes": 7432
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/lib/libxml2.so",
+      "bytes": 1659112
     },
     {
       "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/aarch64-linux-android/21/crt_pad_segment.o",
@@ -892,5 +892,5 @@
     "vector",
     "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/include/xlocale.h"
   ],
-  "generated_at": "2026-11-16T05:08:52.512476+00:00"
+  "generated_at": "2026-11-16T05:50:41.395691+00:00"
 }
