@@ -1,0 +1,92 @@
+name: pipeline
+
+on:
+  workflow_dispatch: {}
+  push:
+    branches: [main]
+  schedule:
+    - cron: "0 3 * * 0"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: pipeline-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - run: pip install z3-solver zstandard
+
+      - run: sudo apt-get update && sudo apt-get install -y zstd xz-utils ninja-build
+
+      - name: Free disk space
+        run: sudo rm -rf /usr/local/lib/android /usr/share/dotnet /opt/ghc /usr/local/.ghcup /opt/hostedtoolcache/CodeQL || true; df -h .
+
+      - name: Run fixture tests
+        run: bash tests/run_tests.sh
+
+      - name: Run full pipeline
+        run: bash pipeline/run_all.sh
+        env:
+          NDK_VERSION: 'r27c'
+          CI: '1'
+        continue-on-error: true
+
+      - name: Summary and size guard
+        run: |
+          python3 - <<'EOF'
+          import json, os, sys
+
+          if not os.path.exists('data/pipeline-state.json'):
+              print('::error::pipeline-state.json missing - run_all failed early')
+              sys.exit(1)
+          s = json.load(open('data/pipeline-state.json'))
+          p = s['stages']['pack']
+          v = s['stages']['verify']
+          failed = [x for x in v.get('projects', []) if x.get('status') != 'ok']
+          if failed:
+              print(f"::error::verify failed for {failed}")
+              sys.exit(1)
+          if p.get('within_budget') is not True:
+              print(f"::error::package {p.get('package_mb')} MB exceeds 300MB budget")
+              sys.exit(1)
+          print('PIPELINE OK', p.get('package_mb'), 'MB')
+          EOF
+
+      - name: Upload package artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ndk-nano-package
+          path: dist-pkg/
+          if-no-files-found: warn
+          retention-days: 14
+
+      - name: Upload state artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pipeline-state
+          path: data/
+          if-no-files-found: warn
+
+      - name: Create prerelease
+        if: github.ref == 'refs/heads/main' && success()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          TAG="nightly-${GITHUB_SHA::7}"
+          gh release create "$TAG" dist-pkg/* data/pipeline-state.json --prerelease \
+            --title "ndk-nano r27c $TAG" --notes-file data/release-notes.md \
+            || (gh release upload "$TAG" dist-pkg/* data/pipeline-state.json --clobber \
+                && gh release edit "$TAG" --notes-file data/release-notes.md)

@@ -1,0 +1,430 @@
+#!/usr/bin/env bash
+# ndk-nano loader: extracts the compressed ndk-nano package on demand and
+# emulates the usual NDK command-line interfaces.
+#
+# المُحمِّل: يستخرج حزمة ndk-nano المضغوطة عند الطلب ويحاكي واجهات NDK
+# المعتادة (clang / clang++ / ndk-build / وسائط CMake).
+#
+# Environment / متغيرات البيئة:
+#   NDK_NANO_PKG    a package file (*.tar.zst / *.tar.xz) or a directory
+#                   that contains one; default: auto-detect the newest
+#                   package in <repo>/dist-pkg (zstd preferred, full
+#                   packages preferred over -tailored).
+#   NDK_NANO_HOME   cache root; default: ~/.cache/ndk-nano
+#
+# Subcommands: setup | path | version | clang | clang++ | ndk-build |
+#              cmake-args | env | doctor | help
+set -euo pipefail
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+REPO_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
+
+NDK_NANO_HOME="${NDK_NANO_HOME:-$HOME/.cache/ndk-nano}"
+TOOLCHAIN_BIN_REL="toolchains/llvm/prebuilt/linux-x86_64/bin"
+
+CACHE=""
+
+log() { echo "[ndk-nano] $*" >&2; }
+
+die() {
+  # die "<english message>" "<arabic message>"
+  echo "[ndk-nano] خطأ: ${2:-$1}" >&2
+  echo "[ndk-nano] error: $1" >&2
+  exit 1
+}
+
+usage() {
+  cat <<'EOF'
+ndk-nano loader / مُحمِّل ndk-nano
+
+usage / الاستخدام:
+  ndk-nano setup                  extract the package into the cache
+  ndk-nano path                   print the extracted tree path
+  ndk-nano version                print the package version
+  ndk-nano clang [args...]        exec the cached clang
+  ndk-nano clang++ [args...]      exec the cached clang++
+  ndk-nano ndk-build [args...]    exec the cached ndk-build
+  ndk-nano cmake-args             print ready-made CMake toolchain arguments
+  ndk-nano env                    print CC/CXX/PATH export lines
+  ndk-nano doctor                 health check (package, decompressor, cache)
+
+env / متغيرات البيئة:
+  NDK_NANO_PKG    package file or directory (default: newest in <repo>/dist-pkg)
+  NDK_NANO_HOME   cache root (default: ~/.cache/ndk-nano)
+EOF
+}
+
+pkg_version() {
+  # pkg_version <file>: prints the version parsed from
+  # ndk-nano-<version>-linux-arm64[-tailored].tar.{zst,xz}
+  local base rest
+  base="$(basename "$1")"
+  case "$base" in
+    ndk-nano-*-linux-arm64.tar.zst|ndk-nano-*-linux-arm64.tar.xz|ndk-nano-*-linux-arm64-tailored.tar.zst|ndk-nano-*-linux-arm64-tailored.tar.xz)
+      rest="${base#ndk-nano-}"
+      printf '%s\n' "${rest%%-*}"
+      return 0
+      ;;
+  esac
+  return 1
+}
+
+pick_newest() {
+  # pick_newest <glob>...: prints the newest existing file among the globs.
+  local f best="" best_mt=-1 mt
+  for f in "$@"; do
+    [ -f "$f" ] || continue
+    mt="$(stat -c %Y "$f" 2>/dev/null)" || mt=-1
+    if [ "$mt" -gt "$best_mt" ]; then
+      best="$f"
+      best_mt="$mt"
+    fi
+  done
+  if [ -n "$best" ]; then
+    printf '%s\n' "$best"
+  fi
+  return 0
+}
+
+find_package() {
+  # find_package <dir>: prints the chosen package or returns 1.
+  # Preference: full zstd > full xz > tailored zstd > tailored xz; newest
+  # first inside each class. Full packages are preferred even though the
+  # -tailored ones are produced later (documented deviation in
+  # docs/ARCHITECTURE.md).
+  local dir="$1" out=""
+  out="$(pick_newest "$dir"/ndk-nano-*-linux-arm64.tar.zst)"
+  if [ -z "$out" ]; then
+    out="$(pick_newest "$dir"/ndk-nano-*-linux-arm64.tar.xz)"
+  fi
+  if [ -z "$out" ]; then
+    out="$(pick_newest "$dir"/ndk-nano-*-linux-arm64-tailored.tar.zst)"
+  fi
+  if [ -z "$out" ]; then
+    out="$(pick_newest "$dir"/ndk-nano-*-linux-arm64-tailored.tar.xz)"
+  fi
+  if [ -n "$out" ]; then
+    printf '%s\n' "$out"
+    return 0
+  fi
+  return 1
+}
+
+resolve_pkg() {
+  # Prints the package path or returns 1 (never dies).
+  local dir
+  if [ -n "${NDK_NANO_PKG:-}" ]; then
+    if [ -f "$NDK_NANO_PKG" ]; then
+      printf '%s\n' "$NDK_NANO_PKG"
+      return 0
+    fi
+    if [ -d "$NDK_NANO_PKG" ]; then
+      dir="$NDK_NANO_PKG"
+    else
+      return 1
+    fi
+  else
+    dir="$REPO_ROOT/dist-pkg"
+    [ -d "$dir" ] || return 1
+  fi
+  find_package "$dir"
+}
+
+extract_pkg() {
+  # extract_pkg <package> <dest>: the packages produced by pipeline/05_pack.sh
+  # contain exactly one top-level directory ("ndk-nano" / "ndk-nano-tailored"),
+  # so --strip-components=1 puts the tree root directly into <dest>.
+  local pkg="$1" dest="$2"
+  mkdir -p "$dest"
+  case "$pkg" in
+    *.tar.zst)
+      if command -v zstd >/dev/null 2>&1; then
+        log "extracting with the zstd CLI: $pkg"
+        tar -I zstd -xf "$pkg" -C "$dest" --strip-components=1
+      elif python3 -c 'import zstandard' >/dev/null 2>&1; then
+        log "extracting with the python zstandard fallback: $pkg"
+        python3 - "$pkg" <<'PYEOF' | tar -xf - -C "$dest" --strip-components=1
+import sys
+
+from zstandard import ZstdDecompressor
+
+with open(sys.argv[1], "rb") as fh:
+    with ZstdDecompressor().stream_reader(fh) as reader:
+        while True:
+            chunk = reader.read(1024 * 1024)
+            if not chunk:
+                break
+            sys.stdout.buffer.write(chunk)
+PYEOF
+      else
+        die "neither the zstd CLI nor the python 'zstandard' module is available; cannot extract $pkg" \
+            "أداة zstd ووحدة python 'zstandard' غير متوفرتين؛ لا يمكن استخراج $pkg"
+      fi
+      ;;
+    *.tar.xz)
+      if command -v xz >/dev/null 2>&1; then
+        log "extracting with the xz CLI: $pkg"
+        tar -I xz -xf "$pkg" -C "$dest" --strip-components=1
+      else
+        die "the xz CLI is not available; cannot extract $pkg" \
+            "أداة xz غير متوفرة؛ لا يمكن استخراج $pkg"
+      fi
+      ;;
+    *)
+      die "unsupported package format: $pkg (expected .tar.zst or .tar.xz)" \
+          "صيغة حزمة غير مدعومة: $pkg (المتوقع ‎.tar.zst أو ‎.tar.xz)"
+      ;;
+  esac
+}
+
+do_setup() {
+  # do_setup <package> <version>: atomic extraction into the cache.
+  local pkg="$1" ver="$2"
+  local cache="$NDK_NANO_HOME/$ver"
+  local tmp="$NDK_NANO_HOME/${ver}.tmp"
+
+  mkdir -p "$NDK_NANO_HOME"
+  log "package : $pkg"
+  log "size    : $(stat -c %s "$pkg") bytes"
+  log "cache   : $cache"
+
+  # Already prepared? (.ready stamp + matching .version + live ndk-build)
+  if [ -f "$cache/.ready" ] \
+     && [ "$(cat "$cache/.version" 2>/dev/null || true)" = "$ver" ] \
+     && [ -x "$cache/ndk-build" ]; then
+    log "already set up: $cache"
+    CACHE="$cache"
+    return 0
+  fi
+
+  log "extracting into a temporary directory, then renaming (atomic)"
+  rm -rf "$tmp"
+  extract_pkg "$pkg" "$tmp"
+
+  if [ ! -f "$tmp/ndk-build" ]; then
+    rm -rf "$tmp"
+    die "the extracted package has no 'ndk-build' at its root: $pkg" \
+        "الحزمة المستخرجة لا تحتوي على 'ndk-build' في جذرها: $pkg"
+  fi
+  [ -x "$tmp/ndk-build" ] || chmod +x "$tmp/ndk-build"
+
+  printf '%s\n' "$ver" > "$tmp/.version"
+  {
+    echo "package: $pkg"
+    echo "bytes: $(stat -c %s "$pkg")"
+    echo "date: $(date -u +%Y-%m-%dT%H:%M:%SZ)"
+  } > "$tmp/.ready"
+
+  rm -rf "$cache"
+  mv "$tmp" "$cache"
+  log "ready: $cache"
+  CACHE="$cache"
+}
+
+ensure_cache() {
+  # Sets CACHE, running the setup when necessary.
+  local pkg ver
+  if ! pkg="$(resolve_pkg)"; then
+    die "no ndk-nano package found; set NDK_NANO_PKG or run the pipeline first" \
+        "لم يُعثَر على حزمة ndk-nano؛ عيّن NDK_NANO_PKG أو شغّل خط الإنتاج أولاً"
+  fi
+  if ! ver="$(pkg_version "$pkg")"; then
+    die "cannot parse a version from $(basename "$pkg")" \
+        "تعذّر استخراج رقم الإصدار من $(basename "$pkg")"
+  fi
+  do_setup "$pkg" "$ver"
+}
+
+cmd_setup() {
+  ensure_cache
+  echo "$CACHE"
+}
+
+cmd_path() {
+  ensure_cache
+  echo "$CACHE"
+}
+
+cmd_version() {
+  local pkg ver d best_ver="" best_mt=-1 mt
+  if pkg="$(resolve_pkg)"; then
+    if ver="$(pkg_version "$pkg")"; then
+      echo "$ver"
+      return 0
+    fi
+    die "cannot parse a version from $(basename "$pkg")" \
+        "تعذّر استخراج رقم الإصدار من $(basename "$pkg")"
+  fi
+  # No package around: fall back to the newest cache stamp.
+  for d in "$NDK_NANO_HOME"/*/; do
+    [ -f "$d/.version" ] || continue
+    read -r ver < "$d/.version" || continue
+    mt="$(stat -c %Y "$d/.version" 2>/dev/null)" || mt=-1
+    if [ "$mt" -gt "$best_mt" ]; then
+      best_ver="$ver"
+      best_mt="$mt"
+    fi
+  done
+  if [ -n "$best_ver" ]; then
+    echo "$best_ver"
+    return 0
+  fi
+  die "cannot determine the version: no package and no cache" \
+      "تعذّر تحديد الإصدار: لا توجد حزمة ولا ذاكرة تخزين مؤقت"
+}
+
+cmd_clang() {
+  ensure_cache
+  local bin="$CACHE/$TOOLCHAIN_BIN_REL/clang"
+  [ -x "$bin" ] || die "clang not found in the cache: $bin" \
+      "لم يُعثَر على clang في الذاكرة المؤقتة: $bin"
+  exec "$bin" "$@"
+}
+
+cmd_clangxx() {
+  ensure_cache
+  local bin="$CACHE/$TOOLCHAIN_BIN_REL/clang++"
+  [ -x "$bin" ] || die "clang++ not found in the cache: $bin" \
+      "لم يُعثَر على clang++ في الذاكرة المؤقتة: $bin"
+  exec "$bin" "$@"
+}
+
+cmd_ndk_build() {
+  ensure_cache
+  [ -x "$CACHE/ndk-build" ] || die "ndk-build not found in the cache: $CACHE/ndk-build" \
+      "لم يُعثَر على ndk-build في الذاكرة المؤقتة: $CACHE/ndk-build"
+  exec "$CACHE/ndk-build" "$@"
+}
+
+cmd_cmake_args() {
+  ensure_cache
+  echo "-DCMAKE_TOOLCHAIN_FILE=$CACHE/build/cmake/android.toolchain.cmake -DANDROID_ABI=arm64-v8a -DANDROID_PLATFORM=android-24"
+}
+
+cmd_env() {
+  ensure_cache
+  cat <<EOF
+export ANDROID_NDK_HOME="$CACHE"
+export CC="$CACHE/$TOOLCHAIN_BIN_REL/clang"
+export CXX="$CACHE/$TOOLCHAIN_BIN_REL/clang++"
+export PATH="$CACHE/$TOOLCHAIN_BIN_REL:\$PATH"
+EOF
+}
+
+cmd_doctor() {
+  local failed=0 pkg="" ver="" cache="" bin="" line="" d best="" best_mt=-1 mt
+
+  echo "ndk-nano doctor / الفحص الصحي"
+  echo "----------------------------------------"
+
+  # (1) package found (path + size)
+  if pkg="$(resolve_pkg)"; then
+    echo "PASS package       : $pkg ($(stat -c %s "$pkg") bytes)"
+    ver="$(pkg_version "$pkg" 2>/dev/null || true)"
+  else
+    echo "FAIL package       : not found (looked in NDK_NANO_PKG and $REPO_ROOT/dist-pkg)"
+    echo "      خطأ: لم يُعثَر على حزمة؛ عيّن NDK_NANO_PKG أو شغّل pipeline/run_all.sh"
+    failed=1
+  fi
+
+  # (2) decompressor available for the package format
+  if [ -n "$pkg" ]; then
+    case "$pkg" in
+      *.tar.zst)
+        if command -v zstd >/dev/null 2>&1; then
+          echo "PASS decompressor  : zstd (CLI)"
+        elif python3 -c 'import zstandard' >/dev/null 2>&1; then
+          echo "PASS decompressor  : python zstandard module"
+        else
+          echo "FAIL decompressor  : neither the zstd CLI nor python zstandard is installed"
+          echo "      خطأ: أداة zstd ووحدة python zstandard غير مثبتتين"
+          failed=1
+        fi
+        ;;
+      *.tar.xz)
+        if command -v xz >/dev/null 2>&1; then
+          echo "PASS decompressor  : xz (CLI)"
+        else
+          echo "FAIL decompressor  : the xz CLI is not installed"
+          echo "      خطأ: أداة xz غير مثبتة"
+          failed=1
+        fi
+        ;;
+    esac
+  fi
+  if ! command -v tar >/dev/null 2>&1; then
+    echo "FAIL decompressor  : tar is not installed"
+    echo "      خطأ: أداة tar غير مثبتة"
+    failed=1
+  fi
+
+  # (3) cache (prefer the one matching the found package version)
+  if [ -n "$ver" ] && [ -f "$NDK_NANO_HOME/$ver/.ready" ]; then
+    cache="$NDK_NANO_HOME/$ver"
+  else
+    for d in "$NDK_NANO_HOME"/*/; do
+      [ -f "$d/.ready" ] || continue
+      mt="$(stat -c %Y "$d/.ready" 2>/dev/null)" || mt=-1
+      if [ "$mt" -gt "$best_mt" ]; then
+        best="$d"
+        best_mt="$mt"
+      fi
+    done
+    cache="${best%/}"
+  fi
+  if [ -n "$cache" ] && [ -f "$cache/.ready" ]; then
+    echo "PASS cache         : $cache ($(du -sh "$cache" 2>/dev/null | cut -f1))"
+  else
+    echo "FAIL cache         : not extracted yet; run: loader/ndk-nano setup"
+    echo "      خطأ: لم تُستخرج الحزمة بعد؛ شغّل: loader/ndk-nano setup"
+    failed=1
+  fi
+
+  # (4) clang --version straight from the cache
+  if [ -n "$cache" ] && [ -f "$cache/.ready" ]; then
+    bin="$cache/$TOOLCHAIN_BIN_REL/clang"
+    if [ -x "$bin" ]; then
+      line="$("$bin" --version 2>/dev/null | head -n 1 || true)"
+      echo "PASS clang         : ${line:-<no version output>}"
+    else
+      echo "FAIL clang         : $bin is missing or not executable"
+      echo "      خطأ: clang مفقود أو غير قابل للتنفيذ في الذاكرة المؤقتة"
+      failed=1
+    fi
+  fi
+
+  echo "----------------------------------------"
+  if [ "$failed" -ne 0 ]; then
+    echo "doctor: FAILED / فشل الفحص"
+    exit 1
+  fi
+  echo "doctor: OK / الفحص سليم"
+}
+
+main() {
+  local cmd="${1:-}"
+  if [ -z "$cmd" ]; then
+    usage >&2
+    die "no subcommand given" "لم يُعطَ أي أمر فرعي"
+  fi
+  shift
+
+  case "$cmd" in
+    setup)          cmd_setup "$@" ;;
+    path)           cmd_path ;;
+    version)        cmd_version ;;
+    clang)          cmd_clang "$@" ;;
+    clang++)        cmd_clangxx "$@" ;;
+    ndk-build)      cmd_ndk_build "$@" ;;
+    cmake-args)     cmd_cmake_args ;;
+    env)            cmd_env ;;
+    doctor)         cmd_doctor ;;
+    help|-h|--help) usage ;;
+    *)
+      usage >&2
+      die "unknown subcommand: $cmd" "أمر فرعي غير معروف: $cmd"
+      ;;
+  esac
+}
+
+main "$@"

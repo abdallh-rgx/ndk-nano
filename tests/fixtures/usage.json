@@ -1,0 +1,15 @@
+{
+  "required_symbols": [
+    "memcpy",
+    "printf",
+    "__android_log_print",
+    "_Znwm",
+    "__cxa_throw",
+    "_Unwind_Resume"
+  ],
+  "required_headers": [
+    "a.h",
+    "log.h"
+  ],
+  "objects": []
+}

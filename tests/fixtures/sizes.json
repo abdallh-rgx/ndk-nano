@@ -1,0 +1,15 @@
+{
+  "files": {
+    "sysroot/usr/lib/aarch64-linux-android/24/libfakec.a": 400000,
+    "sysroot/usr/lib/aarch64-linux-android/24/libfakelog.a": 20000,
+    "sysroot/usr/lib/aarch64-linux-android/24/libfakecxx.a": 1200000,
+    "sysroot/usr/lib/aarch64-linux-android/24/libfakecxx_shared.so": 900000,
+    "sysroot/usr/lib/aarch64-linux-android/24/libfakeunwind.a": 800000,
+    "sysroot/usr/lib/aarch64-linux-android/24/crtbegin_dynamic.o": 6000,
+    "sysroot/usr/lib/aarch64-linux-android/24/crtend_android.o": 2000,
+    "usr/include/a.h": 1000,
+    "usr/include/b.h": 900,
+    "usr/include/c.h": 800,
+    "usr/include/log.h": 700
+  }
+}
