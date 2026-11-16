@@ -106,13 +106,86 @@ if [ -d "$BIN" ]; then
 fi
 
 # ---------------------------------------------------------------------------
-# (c) clang runtime dir: keep only aarch64-android (plus common files),
-#     drop every other target; PROFILE=minimal additionally keeps only
-#     builtins + profile runtimes.
+# (b2) PROFILE=minimal: whitelist of ESSENTIAL tools in bin/.
+#      The full NDK ships clangd, clang-tidy, lldb, llvm-bolt, dsymutil and
+#      dozens of other developer tools (~560MB) that are never invoked while
+#      BUILDING Android native code. Keep the compile/link/inspect core plus
+#      the aarch64 android wrapper scripts and their symlink aliases.
 # ---------------------------------------------------------------------------
+if [ "$PROFILE" = "minimal" ] && [ -d "$BIN" ]; then
+  KEEP_BIN_RE='^(clang|clang\+\+|clang-[0-9]+(\+\+)?|clang-cpp|lld|ld|ld\.lld|ld64\.lld|lld-link|wasm-ld|llvm-(ar|dlltool|lib|ranlib|nm|objcopy|strip|readobj|readelf|size|strings|cxxfilt|symbolizer|addr2line|profdata|rc|windres)|aarch64-linux-android.*)$'
+  removed_tools=0
+  while IFS= read -r -d '' f; do
+    base="$(basename "$f")"
+    if ! printf '%s' "$base" | grep -Eq "$KEEP_BIN_RE"; then
+      rm -f "$f"
+      removed_tools=$((removed_tools + 1))
+    fi
+  done < <(find "$BIN" -maxdepth 1 \( -type f -o -type l \) -print0)
+  # Second pass: drop symlinks whose target no longer exists (e.g. wrappers
+  # pointing at deleted tools).
+  while IFS= read -r -d '' f; do
+    if [ -L "$f" ] && [ ! -e "$f" ]; then
+      rm -f "$f"
+      removed_tools=$((removed_tools + 1))
+    fi
+  done < <(find "$BIN" -maxdepth 1 \( -type f -o -type l \) -print0)
+  log "minimal profile: removed ${removed_tools} non-essential tools from bin/"
+fi
+
+# ---------------------------------------------------------------------------
+# (c) clang runtime dirs: keep only what an arm64-v8a Android build links
+#     against. The stock tree ships runtimes for musl, gnu, i386, x86_64, arm,
+#     riscv and baremetal targets (~230MB) plus per-arch sanitizer subdirs
+#     under lib/linux. PROFILE=minimal keeps ONLY builtins+profile for
+#     aarch64-android; standard keeps the whole aarch64 set.
+# ---------------------------------------------------------------------------
+for RTLAYER in "$TOOLCHAIN"/lib/clang/*/lib; do
+  [ -d "$RTLAYER" ] || continue
+  # (c1) drop every non-Android target dir next to linux/ (musl, gnu, ...).
+  while IFS= read -r -d '' d; do
+    name="$(basename "$d")"
+    case "$name" in
+      linux) continue ;;
+      aarch64-*android*|aarch64-linux-android*) [ "$PROFILE" = "standard" ] && continue ;;
+    esac
+    log "removing clang runtime target dir: ${d#"$DST"/}"
+    rm -rf "$d"
+  done < <(find "$RTLAYER" -mindepth 1 -maxdepth 1 -type d -print0)
+done
+
 for RT in "$TOOLCHAIN"/lib/clang/*/lib/linux; do
   [ -d "$RT" ] || continue
   removed_rt=0
+  # (c2) per-arch subdirectories (sanitizer/ubsan runtimes etc).
+  while IFS= read -r -d '' d; do
+    name="$(basename "$d")"
+    case "$name" in
+      aarch64)
+        if [ "$PROFILE" = "standard" ]; then continue; fi
+        # minimal: inside aarch64/ keep ONLY the pieces the clang driver links
+        # by default on Android (libunwind.a for exceptions/backtraces and the
+        # tiny libatomic.a). libFuzzer/libomp/lldb-server are dropped.
+        while IFS= read -r -d '' sf; do
+          sbase="$(basename "$sf")"
+          case "$sbase" in
+            libunwind.a|libatomic.a) : ;;
+            *)
+              rm -f "$sf"
+              removed_rt=$((removed_rt + 1))
+              log "  minimal: removed ${sf#"$DST"/}"
+              ;;
+          esac
+        done < <(find "$d" -maxdepth 1 -type f -print0)
+        continue
+        ;;
+    esac
+    log "removing clang runtime arch dir: ${d#"$DST"/}"
+    rm -rf "$d"
+    removed_rt=$((removed_rt + 1))
+  done < <(find "$RT" -mindepth 1 -maxdepth 1 -type d -print0)
+  # (c3) top-level runtime files: aarch64-android only; minimal keeps just
+  #      builtins + profile (the two a normal Android build links).
   while IFS= read -r -d '' f; do
     base="$(basename "$f")"
     arch_ok=1
@@ -137,27 +210,44 @@ for RT in "$TOOLCHAIN"/lib/clang/*/lib/linux; do
 done
 
 # ---------------------------------------------------------------------------
-# (d) toolchain lib: drop other-target directories. Conservative: only
-#     directories whose NAME carries a non-kept gnu triple are removed.
+# (d) toolchain lib: drop other-target directories. minimal keeps ONLY the
+#     clang/ resource dir (its runtime/include layout); standard additionally
+#     keeps aarch64-* target dirs. Also drops host-side debugging libraries
+#     (liblldb ~165MB, LLVMPolly, libxml2, libedit, python3.11) in minimal.
 # ---------------------------------------------------------------------------
 if [ -d "$TOOLCHAIN/lib" ]; then
   while IFS= read -r -d '' d; do
     name="$(basename "$d")"
     case "$name" in
-      clang|aarch64-*) continue ;;
-      arm-*|armv7*-*|i686-*|i386-*|x86_64-*)
+      clang) continue ;;
+      aarch64-*android*|aarch64-linux-android*)
+        [ "$PROFILE" = "standard" ] && continue
+        log "removing toolchain lib dir (minimal): $name"
+        rm -rf "$d"
+        continue
+        ;;
+      aarch64*)
+        # aarch64 musl/gnu target dirs are NOT needed for bionic builds.
         log "removing toolchain lib dir: $name"
-        rm -rf "$d" ;;
-      *-pc-linux-gnu|*-unknown-linux-gnu|*-unknown-linux-*)
-        # Host-side runtime dirs; only drop when built for a non-kept arch.
-        case "$name" in
-          aarch64*) continue ;;
-          *)
-            log "removing host lib dir: $name"
-            rm -rf "$d" ;;
-        esac ;;
+        rm -rf "$d"
+        continue
+        ;;
+      arm-*|armv7*-*|i686-*|i386-*|x86_64-*|*-pc-linux-gnu|*-unknown-linux-gnu|*-unknown-linux-*|*-w64-windows-*|*-linux-musl*)
+        log "removing toolchain lib dir: $name"
+        rm -rf "$d"
+        ;;
     esac
   done < <(find "$TOOLCHAIN/lib" -mindepth 1 -maxdepth 1 -type d -print0)
+
+  if [ "$PROFILE" = "minimal" ]; then
+    # Host-side shared libraries only needed by the removed developer tools.
+    for hostlib in liblldb.so liblldbIntelFeatures.so LLVMPolly.so libxml2.so.2 \
+                   libedit.so.0 libz.so.1; do
+      rm -f "$TOOLCHAIN/lib/$hostlib"
+    done
+    rm -rf "$TOOLCHAIN/lib/python3.11"
+    log "minimal profile: removed lldb/host shared libraries from lib/"
+  fi
 fi
 
 # ---------------------------------------------------------------------------
@@ -169,6 +259,24 @@ for extra in simpleperf shader-tools prebuilt gdbserver sources/third_party/shad
     rm -rf "$DST/$extra"
   fi
 done
+
+# (e2) the musl sysroot (~91MB) targets non-Android libc; even the standard
+#      profile never needs it for bionic builds.
+if [ -d "$TOOLCHAIN/musl" ]; then
+  log "removing toolchain musl sysroot"
+  rm -rf "$TOOLCHAIN/musl"
+fi
+
+# (e3) PROFILE=minimal: embedded python3 runtime (~40MB) only serves lldb
+#      and clang tooling that were removed above.
+if [ "$PROFILE" = "minimal" ]; then
+  for extra_py in "$TOOLCHAIN/python3" "$DST/python-packages"; do
+    if [ -e "$extra_py" ]; then
+      log "removing ${extra_py#"$DST"/}"
+      rm -rf "$extra_py"
+    fi
+  done
+fi
 # Keep: build/, meta/, ndk-build, source.properties, NOTICE, all
 # README/LICENSE files, sources/android/cpufeatures (all handled by NOT
 # being in any removal list above).
