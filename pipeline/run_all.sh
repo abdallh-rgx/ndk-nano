@@ -40,10 +40,18 @@ fi
 bash pipeline/02_prune.sh
 
 # ----------------------------------------------------- verification helpers
-if command -v cmake >/dev/null 2>&1 && command -v ninja >/dev/null 2>&1; then
-  VERIFY_MODE="cmake"
+# VERIFY_MODE: auto (cmake if available, else direct) | cmake | direct.
+# CI uses direct: the clang/lld toolchain path is identical to cmake mode but
+# avoids runner-specific CMake probe behavior.
+VERIFY_MODE_ENV="${VERIFY_MODE:-auto}"
+if [ "$VERIFY_MODE_ENV" = "auto" ]; then
+  if command -v cmake >/dev/null 2>&1 && command -v ninja >/dev/null 2>&1; then
+    VERIFY_MODE="cmake"
+  else
+    VERIFY_MODE="direct"
+  fi
 else
-  VERIFY_MODE="direct"
+  VERIFY_MODE="$VERIFY_MODE_ENV"
 fi
 log "verify mode: $VERIFY_MODE"
 
@@ -98,6 +106,15 @@ verify_tree() {
         artifact="$(find "$outdir" -name '*.so' -type f -print -quit || true)"
       else
         log "cmake build failed for $name (see $outdir/config.log / $outdir/build.log)"
+        # Surface the failure directly in the CI job log: the runner is
+        # wiped after the job, so redirected-only logs are useless there.
+        for lg in "$outdir/config.log" "$outdir/build.log"; do
+          if [ -f "$lg" ]; then
+            log "----- BEGIN ${lg#$PIPE_ROOT/} (tail 40) -----"
+            tail -40 "$lg" || true
+            log "----- END ${lg#$PIPE_ROOT/} -----"
+          fi
+        done
       fi
     else
       if NDK_TREE="$tree" OUT_DIR="$outdir" bash "$sample_dir/build.sh" \
@@ -105,6 +122,11 @@ verify_tree() {
         artifact="$(find "$outdir" -name '*.so' -type f -print -quit || true)"
       else
         log "direct build failed for $name (see $outdir/build.log)"
+        if [ -f "$outdir/build.log" ]; then
+          log "----- BEGIN ${outdir#$PIPE_ROOT/}/build.log (tail 40) -----"
+          tail -40 "$outdir/build.log" || true
+          log "----- END build.log -----"
+        fi
       fi
     fi
     if [ -n "$artifact" ] && [ -f "$artifact" ]; then
@@ -145,6 +167,10 @@ for root, dirs, files in os.walk(verify_dir):
         if not name.endswith(".o"):
             continue
         path = os.path.join(root, name)
+        # Skip CMake's own probe objects (compiler id / try_compile); they
+        # are not part of the samples and pollute the requirement set.
+        if "CompilerId" in path or "CMakeScratch" in path or "TryCompile" in path:
+            continue
         syms = []
         try:
             r = subprocess.run(
