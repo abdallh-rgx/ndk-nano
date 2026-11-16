@@ -66,13 +66,14 @@ log "before: ${before_bytes} bytes, ${before_files} files"
 #     Discovery is by triple NAME pattern, never by hardcoded full paths.
 # ---------------------------------------------------------------------------
 if [ -d "$SYSROOT/usr/lib" ]; then
+  # KEEP-ONLY policy: everything that is not the aarch64 bionic triple goes.
+  # (The stock tree also ships riscv64 stubs that would otherwise sneak into
+  # the Z3 candidate set.)
   while IFS= read -r -d '' d; do
     log "removing non-kept triple dir: ${d#"$DST"/}"
     rm -rf "$d"
   done < <(find "$SYSROOT/usr/lib" -mindepth 1 -maxdepth 1 -type d \
-            \( -name 'arm-linux-androideabi' -o -name 'armv7a-linux-androideabi' \
-            -o -name 'i686-linux-android' -o -name 'x86_64-linux-android' \
-            -o -name 'i386-linux-android' \) -print0)
+            ! -name 'aarch64-linux-android' -print0)
 fi
 
 # Optional: keep only specific API levels (comma separated, e.g. API_KEEP=24).

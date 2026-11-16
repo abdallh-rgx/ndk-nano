@@ -119,12 +119,25 @@ def file_policy(rel, keep_paths, keep_basenames, bin_keep):
     # ALL headers stay.
     if rel.startswith(SYSROOT_INCLUDE_REL + "/"):
         return True
+    # Clang builtin headers (stdarg.h, stddef.h, stdint.h, ...) are part of
+    # the compiler itself: no compilation works without them. Always keep.
+    if fnmatch.fnmatch(rel, TOOLCHAIN_REL + "/lib/clang/*/include/*"):
+        return True
     # ABI libraries: only keep-list basenames or crt objects.
     if rel.startswith(ABI_LIB_REL + "/"):
         return base in keep_basenames or fnmatch.fnmatch(base, "crt*.o")
-    # Toolchain lib tree: only keep-list paths plus the builtins archive.
+    # Toolchain lib tree: only keep-list paths, the builtins archive, the
+    # driver-implicit unwinder/atomics and clang resource metadata.
     if rel.startswith(TOOLCHAIN_LIB_REL + "/"):
-        return rel in keep_paths or base == "libclang_rt.builtins-aarch64-android.a"
+        if rel in keep_paths or base == "libclang_rt.builtins-aarch64-android.a":
+            return True
+        if base in ("libunwind.a", "libatomic.a"):
+            return True
+        # clang resource-dir metadata (share/, bin/); include/ is handled above.
+        if fnmatch.fnmatch(rel, TOOLCHAIN_REL + "/lib/clang/*/share/*") or \
+           fnmatch.fnmatch(rel, TOOLCHAIN_REL + "/lib/clang/*/bin/*"):
+            return True
+        return False
     # Toolchain bin: core tools and wrappers only.
     if rel.startswith(BIN_REL + "/"):
         return base in bin_keep

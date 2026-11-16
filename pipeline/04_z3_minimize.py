@@ -159,11 +159,18 @@ def is_fixed_lib(rel):
         if fnmatch.fnmatch(base, "crt*.o"):
             return True
         # The clang driver implicitly links -lc -lm -ldl for android targets,
-        # so the matching stubs must survive any minimal set (documented
-        # engineering decision, see docs/ARCHITECTURE.md).
-        if base in ("libc.so", "libm.so", "libdl.so"):
+        # and -lc++ for C++ (libc++.so is a tiny linker script pulling in
+        # libc++_shared.so), so the matching stubs must survive any minimal
+        # set (documented engineering decision, see docs/ARCHITECTURE.md).
+        if base in ("libc.so", "libm.so", "libdl.so", "libc++.so"):
             return True
     if base == "libclang_rt.builtins-aarch64-android.a":
+        return True
+    # The clang driver passes -l:libunwind.a (and -latomic when needed) on
+    # EVERY android link: bionic does not ship an unwinder, so libunwind.a
+    # must survive any minimal set even though no TU references its symbols
+    # directly (the linker resolves them from the driver's implicit -l flags).
+    if base in ("libunwind.a", "libatomic.a"):
         return True
     # Host shared libraries placed directly in the toolchain lib dirs are
     # runtime dependencies of the clang binaries themselves.
@@ -391,12 +398,18 @@ def main():
             "(all required symbols will be uncovered)")
 
     # Coverage: for every required symbol, which decision files provide it.
+    # Symbols already satisfied by a FIXED (always-kept) file must NOT force
+    # decision variables: e.g. sinf is exported by the driver-implicit libm.so
+    # stubs, so the model must not also pay for the static libm.a archive.
     providers = {}
     uncovered = []
     for sym in required_symbols:
+        if any(sym in index.get(f, []) for f in fixed):
+            providers[sym] = []  # covered for free
+            continue
         prov = [p for p in decision if sym in index.get(p, [])]
         providers[sym] = prov
-        if not prov and not any(sym in index.get(f, []) for f in fixed):
+        if not prov:
             uncovered.append(sym)
     if uncovered:
         log(f"WARNING: uncovered symbols (no provider found): {uncovered}")

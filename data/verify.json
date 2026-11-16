@@ -3,17 +3,31 @@
   "projects": [
     {
       "name": "hello-jni",
-      "status": "fail",
-      "artifact": "/home/z/ndk-nano/work/verify/full/hello-jni/libhello-jni.so",
-      "machine": "",
+      "status": "ok",
+      "artifact": "work/verify/full/hello-jni/libhello-jni.so",
+      "machine": "AArch64",
       "tree": "full"
     },
     {
       "name": "mathlib",
-      "status": "fail",
-      "artifact": "/home/z/ndk-nano/work/verify/full/mathlib/libmathx.so",
-      "machine": "",
+      "status": "ok",
+      "artifact": "work/verify/full/mathlib/libmathx.so",
+      "machine": "AArch64",
       "tree": "full"
+    },
+    {
+      "name": "hello-jni",
+      "status": "ok",
+      "artifact": "work/verify/tailored/hello-jni/libhello-jni.so",
+      "machine": "AArch64",
+      "tree": "tailored"
+    },
+    {
+      "name": "mathlib",
+      "status": "ok",
+      "artifact": "work/verify/tailored/mathlib/libmathx.so",
+      "machine": "AArch64",
+      "tree": "tailored"
     }
   ]
 }

@@ -1,0 +1,896 @@
+{
+  "solver": "z3",
+  "z3_status": "sat",
+  "required": {
+    "symbols": [
+      "_Unwind_Resume",
+      "_ZNSt11logic_errorC2EPKc",
+      "_ZNSt12length_errorD1Ev",
+      "_ZNSt13runtime_errorC1EPKc",
+      "_ZNSt13runtime_errorD1Ev",
+      "_ZNSt20bad_array_new_lengthC1Ev",
+      "_ZNSt20bad_array_new_lengthD1Ev",
+      "_ZTISt12length_error",
+      "_ZTISt13runtime_error",
+      "_ZTISt20bad_array_new_length",
+      "_ZTVSt12length_error",
+      "_ZdlPv",
+      "_Znwm",
+      "__android_log_print",
+      "__cxa_allocate_exception",
+      "__cxa_begin_catch",
+      "__cxa_end_catch",
+      "__cxa_free_exception",
+      "__cxa_throw",
+      "__gxx_personality_v0",
+      "powf",
+      "sinf",
+      "snprintf"
+    ],
+    "headers": [
+      "android/log.h",
+      "jni.h",
+      "math.h",
+      "stdexcept",
+      "stdio.h",
+      "string",
+      "string.h",
+      "vector"
+    ]
+  },
+  "uncovered_symbols": [],
+  "kept_files": [
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/aarch64-linux-android/29/liblog.so",
+      "bytes": 12280
+    },
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/aarch64-linux-android/libc++_shared.so",
+      "bytes": 1794776
+    }
+  ],
+  "dropped_files": 293,
+  "bytes_total": 29176548,
+  "bytes_kept": 7135520,
+  "bytes_saved": 22041028,
+  "solve_ms": 35,
+  "greedy": {
+    "bytes_kept": 7917496
+  },
+  "fixed_files": [
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/lib/clang/18/lib/linux/aarch64/libatomic.a",
+      "bytes": 150
+    },
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/lib/clang/18/lib/linux/aarch64/libunwind.a",
+      "bytes": 91440
+    },
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/lib/clang/18/lib/linux/libclang_rt.builtins-aarch64-android.a",
+      "bytes": 488484
+    },
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/lib/libRemarks.so",
+      "bytes": 7432
+    },
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/aarch64-linux-android/21/crt_pad_segment.o",
+      "bytes": 784
+    },
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/aarch64-linux-android/21/crtbegin_dynamic.o",
+      "bytes": 3576
+    },
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/aarch64-linux-android/21/crtbegin_so.o",
+      "bytes": 3432
+    },
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/aarch64-linux-android/21/crtbegin_static.o",
+      "bytes": 3552
+    },
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/aarch64-linux-android/21/crtend_android.o",
+      "bytes": 840
+    },
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/aarch64-linux-android/21/crtend_so.o",
+      "bytes": 840
+    },
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/aarch64-linux-android/21/libc++.so",
+      "bytes": 19
+    },
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/aarch64-linux-android/21/libc.so",
+      "bytes": 180848
+    },
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/aarch64-linux-android/21/libdl.so",
+      "bytes": 12264
+    },
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/aarch64-linux-android/21/libm.so",
+      "bytes": 44944
+    },
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/aarch64-linux-android/22/crt_pad_segment.o",
+      "bytes": 784
+    },
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/aarch64-linux-android/22/crtbegin_dynamic.o",
+      "bytes": 3576
+    },
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/aarch64-linux-android/22/crtbegin_so.o",
+      "bytes": 3432
+    },
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/aarch64-linux-android/22/crtbegin_static.o",
+      "bytes": 3552
+    },
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/aarch64-linux-android/22/crtend_android.o",
+      "bytes": 840
+    },
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/aarch64-linux-android/22/crtend_so.o",
+      "bytes": 840
+    },
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/aarch64-linux-android/22/libc++.so",
+      "bytes": 19
+    },
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/aarch64-linux-android/22/libc.so",
+      "bytes": 186928
+    },
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/aarch64-linux-android/22/libdl.so",
+      "bytes": 12264
+    },
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/aarch64-linux-android/22/libm.so",
+      "bytes": 44936
+    },
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/aarch64-linux-android/23/crt_pad_segment.o",
+      "bytes": 784
+    },
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/aarch64-linux-android/23/crtbegin_dynamic.o",
+      "bytes": 3784
+    },
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/aarch64-linux-android/23/crtbegin_so.o",
+      "bytes": 3648
+    },
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/aarch64-linux-android/23/crtbegin_static.o",
+      "bytes": 3552
+    },
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/aarch64-linux-android/23/crtend_android.o",
+      "bytes": 840
+    },
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/aarch64-linux-android/23/crtend_so.o",
+      "bytes": 840
+    },
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/aarch64-linux-android/23/libc++.so",
+      "bytes": 19
+    },
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/aarch64-linux-android/23/libc.so",
+      "bytes": 196456
+    },
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/aarch64-linux-android/23/libdl.so",
+      "bytes": 12272
+    },
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/aarch64-linux-android/23/libm.so",
+      "bytes": 53080
+    },
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/aarch64-linux-android/24/crt_pad_segment.o",
+      "bytes": 784
+    },
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/aarch64-linux-android/24/crtbegin_dynamic.o",
+      "bytes": 3784
+    },
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/aarch64-linux-android/24/crtbegin_so.o",
+      "bytes": 3648
+    },
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/aarch64-linux-android/24/crtbegin_static.o",
+      "bytes": 3552
+    },
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/aarch64-linux-android/24/crtend_android.o",
+      "bytes": 840
+    },
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/aarch64-linux-android/24/crtend_so.o",
+      "bytes": 840
+    },
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/aarch64-linux-android/24/libc++.so",
+      "bytes": 19
+    },
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/aarch64-linux-android/24/libc.so",
+      "bytes": 204704
+    },
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/aarch64-linux-android/24/libdl.so",
+      "bytes": 12480
+    },
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/aarch64-linux-android/24/libm.so",
+      "bytes": 53096
+    },
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/aarch64-linux-android/25/crt_pad_segment.o",
+      "bytes": 784
+    },
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/aarch64-linux-android/25/crtbegin_dynamic.o",
+      "bytes": 3784
+    },
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/aarch64-linux-android/25/crtbegin_so.o",
+      "bytes": 3648
+    },
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/aarch64-linux-android/25/crtbegin_static.o",
+      "bytes": 3552
+    },
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/aarch64-linux-android/25/crtend_android.o",
+      "bytes": 840
+    },
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/aarch64-linux-android/25/crtend_so.o",
+      "bytes": 840
+    },
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/aarch64-linux-android/25/libc++.so",
+      "bytes": 19
+    },
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/aarch64-linux-android/25/libc.so",
+      "bytes": 204688
+    },
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/aarch64-linux-android/25/libdl.so",
+      "bytes": 12480
+    },
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/aarch64-linux-android/25/libm.so",
+      "bytes": 53088
+    },
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/aarch64-linux-android/26/crt_pad_segment.o",
+      "bytes": 784
+    },
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/aarch64-linux-android/26/crtbegin_dynamic.o",
+      "bytes": 3784
+    },
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/aarch64-linux-android/26/crtbegin_so.o",
+      "bytes": 3648
+    },
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/aarch64-linux-android/26/crtbegin_static.o",
+      "bytes": 3552
+    },
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/aarch64-linux-android/26/crtend_android.o",
+      "bytes": 840
+    },
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/aarch64-linux-android/26/crtend_so.o",
+      "bytes": 840
+    },
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/aarch64-linux-android/26/libc++.so",
+      "bytes": 19
+    },
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/aarch64-linux-android/26/libc.so",
+      "bytes": 213176
+    },
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/aarch64-linux-android/26/libdl.so",
+      "bytes": 12480
+    },
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/aarch64-linux-android/26/libm.so",
+      "bytes": 54592
+    },
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/aarch64-linux-android/27/crt_pad_segment.o",
+      "bytes": 784
+    },
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/aarch64-linux-android/27/crtbegin_dynamic.o",
+      "bytes": 3784
+    },
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/aarch64-linux-android/27/crtbegin_so.o",
+      "bytes": 3648
+    },
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/aarch64-linux-android/27/crtbegin_static.o",
+      "bytes": 3552
+    },
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/aarch64-linux-android/27/crtend_android.o",
+      "bytes": 840
+    },
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/aarch64-linux-android/27/crtend_so.o",
+      "bytes": 840
+    },
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/aarch64-linux-android/27/libc++.so",
+      "bytes": 19
+    },
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/aarch64-linux-android/27/libc.so",
+      "bytes": 213184
+    },
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/aarch64-linux-android/27/libdl.so",
+      "bytes": 12784
+    },
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/aarch64-linux-android/27/libm.so",
+      "bytes": 54584
+    },
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/aarch64-linux-android/28/crt_pad_segment.o",
+      "bytes": 784
+    },
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/aarch64-linux-android/28/crtbegin_dynamic.o",
+      "bytes": 3784
+    },
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/aarch64-linux-android/28/crtbegin_so.o",
+      "bytes": 3648
+    },
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/aarch64-linux-android/28/crtbegin_static.o",
+      "bytes": 3552
+    },
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/aarch64-linux-android/28/crtend_android.o",
+      "bytes": 840
+    },
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/aarch64-linux-android/28/crtend_so.o",
+      "bytes": 840
+    },
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/aarch64-linux-android/28/libc++.so",
+      "bytes": 19
+    },
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/aarch64-linux-android/28/libc.so",
+      "bytes": 231312
+    },
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/aarch64-linux-android/28/libdl.so",
+      "bytes": 12784
+    },
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/aarch64-linux-android/28/libm.so",
+      "bytes": 54600
+    },
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/aarch64-linux-android/29/crt_pad_segment.o",
+      "bytes": 784
+    },
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/aarch64-linux-android/29/crtbegin_dynamic.o",
+      "bytes": 3904
+    },
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/aarch64-linux-android/29/crtbegin_so.o",
+      "bytes": 3648
+    },
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/aarch64-linux-android/29/crtbegin_static.o",
+      "bytes": 3720
+    },
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/aarch64-linux-android/29/crtend_android.o",
+      "bytes": 840
+    },
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/aarch64-linux-android/29/crtend_so.o",
+      "bytes": 840
+    },
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/aarch64-linux-android/29/libc++.so",
+      "bytes": 19
+    },
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/aarch64-linux-android/29/libc.so",
+      "bytes": 232776
+    },
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/aarch64-linux-android/29/libdl.so",
+      "bytes": 12784
+    },
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/aarch64-linux-android/29/libm.so",
+      "bytes": 54584
+    },
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/aarch64-linux-android/30/crt_pad_segment.o",
+      "bytes": 784
+    },
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/aarch64-linux-android/30/crtbegin_dynamic.o",
+      "bytes": 3904
+    },
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/aarch64-linux-android/30/crtbegin_so.o",
+      "bytes": 3648
+    },
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/aarch64-linux-android/30/crtbegin_static.o",
+      "bytes": 3720
+    },
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/aarch64-linux-android/30/crtend_android.o",
+      "bytes": 840
+    },
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/aarch64-linux-android/30/crtend_so.o",
+      "bytes": 840
+    },
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/aarch64-linux-android/30/libc++.so",
+      "bytes": 19
+    },
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/aarch64-linux-android/30/libc.so",
+      "bytes": 246008
+    },
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/aarch64-linux-android/30/libdl.so",
+      "bytes": 12784
+    },
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/aarch64-linux-android/30/libm.so",
+      "bytes": 54576
+    },
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/aarch64-linux-android/31/crt_pad_segment.o",
+      "bytes": 784
+    },
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/aarch64-linux-android/31/crtbegin_dynamic.o",
+      "bytes": 3904
+    },
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/aarch64-linux-android/31/crtbegin_so.o",
+      "bytes": 3648
+    },
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/aarch64-linux-android/31/crtbegin_static.o",
+      "bytes": 3720
+    },
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/aarch64-linux-android/31/crtend_android.o",
+      "bytes": 840
+    },
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/aarch64-linux-android/31/crtend_so.o",
+      "bytes": 840
+    },
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/aarch64-linux-android/31/libc++.so",
+      "bytes": 19
+    },
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/aarch64-linux-android/31/libc.so",
+      "bytes": 247144
+    },
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/aarch64-linux-android/31/libdl.so",
+      "bytes": 12784
+    },
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/aarch64-linux-android/31/libm.so",
+      "bytes": 54584
+    },
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/aarch64-linux-android/32/crt_pad_segment.o",
+      "bytes": 784
+    },
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/aarch64-linux-android/32/crtbegin_dynamic.o",
+      "bytes": 3904
+    },
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/aarch64-linux-android/32/crtbegin_so.o",
+      "bytes": 3648
+    },
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/aarch64-linux-android/32/crtbegin_static.o",
+      "bytes": 3720
+    },
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/aarch64-linux-android/32/crtend_android.o",
+      "bytes": 840
+    },
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/aarch64-linux-android/32/crtend_so.o",
+      "bytes": 840
+    },
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/aarch64-linux-android/32/libc++.so",
+      "bytes": 19
+    },
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/aarch64-linux-android/32/libc.so",
+      "bytes": 247128
+    },
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/aarch64-linux-android/32/libdl.so",
+      "bytes": 12784
+    },
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/aarch64-linux-android/32/libm.so",
+      "bytes": 54600
+    },
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/aarch64-linux-android/33/crt_pad_segment.o",
+      "bytes": 784
+    },
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/aarch64-linux-android/33/crtbegin_dynamic.o",
+      "bytes": 3904
+    },
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/aarch64-linux-android/33/crtbegin_so.o",
+      "bytes": 3648
+    },
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/aarch64-linux-android/33/crtbegin_static.o",
+      "bytes": 3720
+    },
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/aarch64-linux-android/33/crtend_android.o",
+      "bytes": 840
+    },
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/aarch64-linux-android/33/crtend_so.o",
+      "bytes": 840
+    },
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/aarch64-linux-android/33/libc++.so",
+      "bytes": 19
+    },
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/aarch64-linux-android/33/libc.so",
+      "bytes": 247760
+    },
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/aarch64-linux-android/33/libdl.so",
+      "bytes": 12784
+    },
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/aarch64-linux-android/33/libm.so",
+      "bytes": 54592
+    },
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/aarch64-linux-android/34/crt_pad_segment.o",
+      "bytes": 784
+    },
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/aarch64-linux-android/34/crtbegin_dynamic.o",
+      "bytes": 3904
+    },
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/aarch64-linux-android/34/crtbegin_so.o",
+      "bytes": 3648
+    },
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/aarch64-linux-android/34/crtbegin_static.o",
+      "bytes": 3720
+    },
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/aarch64-linux-android/34/crtend_android.o",
+      "bytes": 840
+    },
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/aarch64-linux-android/34/crtend_so.o",
+      "bytes": 840
+    },
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/aarch64-linux-android/34/libc++.so",
+      "bytes": 19
+    },
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/aarch64-linux-android/34/libc.so",
+      "bytes": 248328
+    },
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/aarch64-linux-android/34/libdl.so",
+      "bytes": 12784
+    },
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/aarch64-linux-android/34/libm.so",
+      "bytes": 54592
+    },
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/aarch64-linux-android/35/crt_pad_segment.o",
+      "bytes": 784
+    },
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/aarch64-linux-android/35/crtbegin_dynamic.o",
+      "bytes": 3904
+    },
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/aarch64-linux-android/35/crtbegin_so.o",
+      "bytes": 3648
+    },
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/aarch64-linux-android/35/crtbegin_static.o",
+      "bytes": 3720
+    },
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/aarch64-linux-android/35/crtend_android.o",
+      "bytes": 840
+    },
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/aarch64-linux-android/35/crtend_so.o",
+      "bytes": 840
+    },
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/aarch64-linux-android/35/libc++.so",
+      "bytes": 19
+    },
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/aarch64-linux-android/35/libc.so",
+      "bytes": 250024
+    },
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/aarch64-linux-android/35/libdl.so",
+      "bytes": 12800
+    },
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/aarch64-linux-android/35/libm.so",
+      "bytes": 54592
+    },
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/include/android/api-level.h",
+      "bytes": 8050
+    },
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/include/android/log.h",
+      "bytes": 14345
+    },
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/include/android/ndk-version.h",
+      "bytes": 710
+    },
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/include/android/versioning.h",
+      "bytes": 4382
+    },
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/include/bits/fortify/stdio.h",
+      "bytes": 6320
+    },
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/include/bits/fortify/string.h",
+      "bytes": 10514
+    },
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/include/bits/fortify/strings.h",
+      "bytes": 2484
+    },
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/include/bits/get_device_api_level_inlines.h",
+      "bytes": 2026
+    },
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/include/bits/posix_limits.h",
+      "bytes": 9224
+    },
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/include/bits/pthread_types.h",
+      "bytes": 2599
+    },
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/include/bits/seek_constants.h",
+      "bytes": 2111
+    },
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/include/bits/strcasecmp.h",
+      "bytes": 2949
+    },
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/include/bits/struct_file.h",
+      "bytes": 1705
+    },
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/include/bits/wchar_limits.h",
+      "bytes": 1828
+    },
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/include/c++/v1/float.h",
+      "bytes": 1681
+    },
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/include/c++/v1/stddef.h",
+      "bytes": 1160
+    },
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/include/jni.h",
+      "bytes": 52236
+    },
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/include/limits.h",
+      "bytes": 5432
+    },
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/include/linux/compiler.h",
+      "bytes": 258
+    },
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/include/linux/compiler_types.h",
+      "bytes": 265
+    },
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/include/linux/limits.h",
+      "bytes": 544
+    },
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/include/linux/posix_types.h",
+      "bytes": 537
+    },
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/include/linux/stddef.h",
+      "bytes": 688
+    },
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/include/linux/types.h",
+      "bytes": 992
+    },
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/include/math.h",
+      "bytes": 12495
+    },
+    {
+      "path": "stdexcept",
+      "bytes": 0
+    },
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/include/stdint.h",
+      "bytes": 6679
+    },
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/include/stdio.h",
+      "bytes": 15277
+    },
+    {
+      "path": "string",
+      "bytes": 0
+    },
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/include/string.h",
+      "bytes": 12209
+    },
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/include/strings.h",
+      "bytes": 3743
+    },
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/include/sys/cdefs.h",
+      "bytes": 12911
+    },
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/include/sys/types.h",
+      "bytes": 4656
+    },
+    {
+      "path": "vector",
+      "bytes": 0
+    },
+    {
+      "path": "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/include/xlocale.h",
+      "bytes": 1959
+    }
+  ],
+  "asm_rules": {
+    "verified": true,
+    "rules": [
+      {
+        "name": "R1",
+        "expr": "x + 0 == x",
+        "occurrences": 0
+      },
+      {
+        "name": "R2",
+        "expr": "x - 0 == x",
+        "occurrences": 0
+      },
+      {
+        "name": "R3",
+        "expr": "x == x",
+        "occurrences": 0
+      },
+      {
+        "name": "R4",
+        "expr": "x & 0xFFFFFFFFFFFFFFFF == x",
+        "occurrences": 0
+      },
+      {
+        "name": "R5",
+        "expr": "x | 0 == x",
+        "occurrences": 0
+      }
+    ],
+    "occurrences_total": 0,
+    "est_bytes_saved": 0
+  },
+  "asm_samples_minimized": {
+    "jni.h": "\t.text\n\t.file\t\"tu.c\"\n\t.ident\t\"Android (12470979, +pgo, +bolt, +lto, +mlgo, based on r522817c) clang version 18.0.3 (https://android.googlesource.com/toolchain/llvm-project d8003a456d14a3deb8054cdaa529ffbf02d9b262)\"\n\t.section\t\".note.GNU-stack\",\"\",@progbits\n",
+    "stdio.h": "\t.text\n\t.file\t\"tu.c\"\n\t.ident\t\"Android (12470979, +pgo, +bolt, +lto, +mlgo, based on r522817c) clang version 18.0.3 (https://android.googlesource.com/toolchain/llvm-project d8003a456d14a3deb8054cdaa529ffbf02d9b262)\"\n\t.section\t\".note.GNU-stack\",\"\",@progbits\n",
+    "c++/v1/vector": "\t.text\n\t.file\t\"tu.cpp\"\n\t.ident\t\"Android (12470979, +pgo, +bolt, +lto, +mlgo, based on r522817c) clang version 18.0.3 (https://android.googlesource.com/toolchain/llvm-project d8003a456d14a3deb8054cdaa529ffbf02d9b262)\"\n\t.section\t\".note.GNU-stack\",\"\",@progbits\n",
+    "math.h": "\t.text\n\t.file\t\"tu.c\"\n\t.ident\t\"Android (12470979, +pgo, +bolt, +lto, +mlgo, based on r522817c) clang version 18.0.3 (https://android.googlesource.com/toolchain/llvm-project d8003a456d14a3deb8054cdaa529ffbf02d9b262)\"\n\t.section\t\".note.GNU-stack\",\"\",@progbits\n",
+    "android/log.h": "\t.text\n\t.file\t\"tu.c\"\n\t.ident\t\"Android (12470979, +pgo, +bolt, +lto, +mlgo, based on r522817c) clang version 18.0.3 (https://android.googlesource.com/toolchain/llvm-project d8003a456d14a3deb8054cdaa529ffbf02d9b262)\"\n\t.section\t\".note.GNU-stack\",\"\",@progbits\n",
+    "string.h": "\t.text\n\t.file\t\"tu.c\"\n\t.ident\t\"Android (12470979, +pgo, +bolt, +lto, +mlgo, based on r522817c) clang version 18.0.3 (https://android.googlesource.com/toolchain/llvm-project d8003a456d14a3deb8054cdaa529ffbf02d9b262)\"\n\t.section\t\".note.GNU-stack\",\"\",@progbits\n"
+  },
+  "needed_headers": [
+    "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/include/android/api-level.h",
+    "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/include/android/log.h",
+    "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/include/android/ndk-version.h",
+    "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/include/android/versioning.h",
+    "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/include/bits/fortify/stdio.h",
+    "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/include/bits/fortify/string.h",
+    "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/include/bits/fortify/strings.h",
+    "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/include/bits/get_device_api_level_inlines.h",
+    "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/include/bits/posix_limits.h",
+    "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/include/bits/pthread_types.h",
+    "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/include/bits/seek_constants.h",
+    "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/include/bits/strcasecmp.h",
+    "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/include/bits/struct_file.h",
+    "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/include/bits/wchar_limits.h",
+    "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/include/c++/v1/float.h",
+    "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/include/c++/v1/stddef.h",
+    "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/include/jni.h",
+    "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/include/limits.h",
+    "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/include/linux/compiler.h",
+    "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/include/linux/compiler_types.h",
+    "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/include/linux/limits.h",
+    "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/include/linux/posix_types.h",
+    "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/include/linux/stddef.h",
+    "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/include/linux/types.h",
+    "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/include/math.h",
+    "stdexcept",
+    "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/include/stdint.h",
+    "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/include/stdio.h",
+    "string",
+    "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/include/string.h",
+    "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/include/strings.h",
+    "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/include/sys/cdefs.h",
+    "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/include/sys/types.h",
+    "vector",
+    "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/include/xlocale.h"
+  ],
+  "generated_at": "2026-11-16T05:08:52.512476+00:00"
+}
