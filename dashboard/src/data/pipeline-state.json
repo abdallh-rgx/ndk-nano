@@ -1,0 +1,139 @@
+{
+  "meta": {
+    "ndk_version": "r27c",
+    "abi": "arm64-v8a",
+    "host": "linux-x86_64",
+    "generated_at": "2026-11-16T05:15:26.713316+00:00",
+    "source": "local"
+  },
+  "stages": {
+    "fetch": {
+      "zip_mb": 633.23,
+      "extracted_mb": 1958.6
+    },
+    "prune": {
+      "before_mb": 1958.6,
+      "after_mb": 309.79,
+      "removed_files": 4924,
+      "stripped_binaries": 12
+    },
+    "manifest": {
+      "headers_total": 1695,
+      "headers_ok": 1615,
+      "headers_failed": 80,
+      "asm_bytes_total": 413684,
+      "macros_total": 1181420,
+      "asm_samples": {
+        "jni.h": {
+          "bytes": 256,
+          "sha256": "e896f8731f1adad11f8b01ebfff3c01675d9364ee8356e6ec74e4bd4f1232577",
+          "asm_text": "\t.text\n\t.file\t\"tu.c\"\n\t.ident\t\"Android (12470979, +pgo, +bolt, +lto, +mlgo, based on r522817c) clang version 18.0.3 (https://android.googlesource.com/toolchain/llvm-project d8003a456d14a3deb8054cdaa529ffbf02d9b262)\"\n\t.section\t\".note.GNU-stack\",\"\",@progbits\n"
+        },
+        "stdio.h": {
+          "bytes": 256,
+          "sha256": "e896f8731f1adad11f8b01ebfff3c01675d9364ee8356e6ec74e4bd4f1232577",
+          "asm_text": "\t.text\n\t.file\t\"tu.c\"\n\t.ident\t\"Android (12470979, +pgo, +bolt, +lto, +mlgo, based on r522817c) clang version 18.0.3 (https://android.googlesource.com/toolchain/llvm-project d8003a456d14a3deb8054cdaa529ffbf02d9b262)\"\n\t.section\t\".note.GNU-stack\",\"\",@progbits\n"
+        },
+        "c++/v1/vector": {
+          "bytes": 258,
+          "sha256": "0e1dfad6c67936f5836bb0a11906ce6a026f01217840086c373a2a73361b6bf4",
+          "asm_text": "\t.text\n\t.file\t\"tu.cpp\"\n\t.ident\t\"Android (12470979, +pgo, +bolt, +lto, +mlgo, based on r522817c) clang version 18.0.3 (https://android.googlesource.com/toolchain/llvm-project d8003a456d14a3deb8054cdaa529ffbf02d9b262)\"\n\t.section\t\".note.GNU-stack\",\"\",@progbits\n"
+        },
+        "math.h": {
+          "bytes": 256,
+          "sha256": "e896f8731f1adad11f8b01ebfff3c01675d9364ee8356e6ec74e4bd4f1232577",
+          "asm_text": "\t.text\n\t.file\t\"tu.c\"\n\t.ident\t\"Android (12470979, +pgo, +bolt, +lto, +mlgo, based on r522817c) clang version 18.0.3 (https://android.googlesource.com/toolchain/llvm-project d8003a456d14a3deb8054cdaa529ffbf02d9b262)\"\n\t.section\t\".note.GNU-stack\",\"\",@progbits\n"
+        },
+        "android/log.h": {
+          "bytes": 256,
+          "sha256": "e896f8731f1adad11f8b01ebfff3c01675d9364ee8356e6ec74e4bd4f1232577",
+          "asm_text": "\t.text\n\t.file\t\"tu.c\"\n\t.ident\t\"Android (12470979, +pgo, +bolt, +lto, +mlgo, based on r522817c) clang version 18.0.3 (https://android.googlesource.com/toolchain/llvm-project d8003a456d14a3deb8054cdaa529ffbf02d9b262)\"\n\t.section\t\".note.GNU-stack\",\"\",@progbits\n"
+        },
+        "string.h": {
+          "bytes": 256,
+          "sha256": "e896f8731f1adad11f8b01ebfff3c01675d9364ee8356e6ec74e4bd4f1232577",
+          "asm_text": "\t.text\n\t.file\t\"tu.c\"\n\t.ident\t\"Android (12470979, +pgo, +bolt, +lto, +mlgo, based on r522817c) clang version 18.0.3 (https://android.googlesource.com/toolchain/llvm-project d8003a456d14a3deb8054cdaa529ffbf02d9b262)\"\n\t.section\t\".note.GNU-stack\",\"\",@progbits\n"
+        }
+      }
+    },
+    "z3": {
+      "solver": "z3",
+      "required_symbols": [
+        "_Unwind_Resume",
+        "_ZNSt11logic_errorC2EPKc",
+        "_ZNSt12length_errorD1Ev",
+        "_ZNSt13runtime_errorC1EPKc",
+        "_ZNSt13runtime_errorD1Ev",
+        "_ZNSt20bad_array_new_lengthC1Ev",
+        "_ZNSt20bad_array_new_lengthD1Ev",
+        "_ZTISt12length_error",
+        "_ZTISt13runtime_error",
+        "_ZTISt20bad_array_new_length",
+        "_ZTVSt12length_error",
+        "_ZdlPv",
+        "_Znwm",
+        "__android_log_print",
+        "__cxa_allocate_exception",
+        "__cxa_begin_catch",
+        "__cxa_end_catch",
+        "__cxa_free_exception",
+        "__cxa_throw",
+        "__gxx_personality_v0",
+        "powf",
+        "sinf",
+        "snprintf"
+      ],
+      "kept_files": 2,
+      "dropped_files": 293,
+      "bytes_total": 29176548,
+      "bytes_kept_mb": 6.8,
+      "bytes_saved_mb": 21.02,
+      "solve_ms": 35,
+      "greedy_kept_mb": 7.55,
+      "asm_rules_verified": true,
+      "asm_rules_occurrences": 0,
+      "asm_est_bytes_saved": 0
+    },
+    "pack": {
+      "format": "xz",
+      "package_mb": 55.8,
+      "tailored_mb": 50.12,
+      "ratio": 5.55,
+      "budget_mb": 300,
+      "within_budget": true
+    },
+    "verify": {
+      "mode": "direct",
+      "projects": [
+        {
+          "name": "hello-jni",
+          "status": "ok",
+          "artifact": "work/verify/full/hello-jni/libhello-jni.so",
+          "machine": "AArch64",
+          "tree": "full"
+        },
+        {
+          "name": "mathlib",
+          "status": "ok",
+          "artifact": "work/verify/full/mathlib/libmathx.so",
+          "machine": "AArch64",
+          "tree": "full"
+        },
+        {
+          "name": "hello-jni",
+          "status": "ok",
+          "artifact": "work/verify/tailored/hello-jni/libhello-jni.so",
+          "machine": "AArch64",
+          "tree": "tailored"
+        },
+        {
+          "name": "mathlib",
+          "status": "ok",
+          "artifact": "work/verify/tailored/mathlib/libmathx.so",
+          "machine": "AArch64",
+          "tree": "tailored"
+        }
+      ]
+    }
+  }
+}

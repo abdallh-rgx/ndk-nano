@@ -1,0 +1,18 @@
+{
+  "description": "مجموعة بيانات توضيحية مبنية على بنية sysroot الحقيقية للـ NDK (أسماء مكتبات وأحجام تقريبية واقعية) — النسخة الكاملة تعمل في المستودع على ملفات NDK فعلية",
+  "options": [
+    { "id": "libc", "label": "libc.so + stdio.h + stdlib.h + string.h", "cost_kb": 496, "files": ["sysroot/usr/lib/arm64-v8a/24/libc.so", "usr/include/stdio.h", "usr/include/stdlib.h", "usr/include/string.h"], "symbols": ["memcpy", "strlen", "printf", "malloc"] },
+    { "id": "liblog", "label": "liblog.so + android/log.h", "cost_kb": 30, "files": ["sysroot/usr/lib/arm64-v8a/24/liblog.so", "usr/include/android/log.h"], "symbols": ["__android_log_print", "__android_log_write"] },
+    { "id": "libm", "label": "libm.so + math.h", "cost_kb": 230, "files": ["sysroot/usr/lib/arm64-v8a/24/libm.so", "usr/include/math.h"], "symbols": ["sin", "cos", "pow"] },
+    { "id": "libegl", "label": "libEGL.so + EGL/egl.h", "cost_kb": 72, "files": ["sysroot/usr/lib/arm64-v8a/24/libEGL.so", "usr/include/EGL/egl.h"], "symbols": ["eglGetDisplay", "eglInitialize"] },
+    { "id": "libgles", "label": "libGLESv3.so + GLES3/gl3.h", "cost_kb": 86, "files": ["sysroot/usr/lib/arm64-v8a/24/libGLESv3.so", "usr/include/GLES3/gl3.h"], "symbols": ["glGetString", "glClear"] },
+    { "id": "libandroid", "label": "libandroid.so + android/asset_manager.h", "cost_kb": 38, "files": ["sysroot/usr/lib/arm64-v8a/24/libandroid.so", "usr/include/android/asset_manager.h"], "symbols": ["AAssetManager_open", "ANativeActivity_onCreate"] },
+    { "id": "libcxx_shared", "label": "libc++_shared.so + <vector>", "cost_kb": 1262, "files": ["toolchain/lib/aarch64-unknown-linux-android/libc++_shared.so", "usr/include/c++/v1/vector"], "symbols": ["_Znwm", "_ZdlPv", "__cxa_throw", "__cxa_begin_catch", "_ZNSt6vectorIiSaIiEE9push_backERKi"] },
+    { "id": "libcxxabi", "label": "libc++abi.a (ربط جزئي ستاتيكي)", "cost_kb": 620, "files": ["toolchain/lib/aarch64-unknown-linux-android/libc++abi.a"], "symbols": ["_Znwm", "_ZdlPv", "__cxa_throw", "__cxa_begin_catch"] },
+    { "id": "libcxx_static", "label": "libc++_static.a (ستاتيكي كامل)", "cost_kb": 39074, "files": ["toolchain/lib/aarch64-unknown-linux-android/libc++_static.a"], "symbols": ["_Znwm", "_ZdlPv", "__cxa_throw", "__cxa_begin_catch", "_ZNSt6vectorIiSaIiEE9push_backERKi"] },
+    { "id": "libunwind", "label": "libunwind.a", "cost_kb": 850, "files": ["toolchain/lib/aarch64-unknown-linux-android/libunwind.a"], "symbols": ["_Unwind_Resume", "_Unwind_Backtrace"] },
+    { "id": "builtins", "label": "libclang_rt.builtins-aarch64-android.a", "cost_kb": 320, "files": ["toolchain/lib/clang/lib/linux/libclang_rt.builtins-aarch64-android.a"], "symbols": ["__fixdfti", "__floattidf", "__fixunsdfdi"] },
+    { "id": "crt", "label": "crtbegin_dynamic.o + crtend_android.o", "cost_kb": 8, "files": ["sysroot/usr/lib/arm64-v8a/24/crtbegin_dynamic.o", "sysroot/usr/lib/arm64-v8a/24/crtend_android.o"], "symbols": ["__dso_handle"] }
+  ],
+  "default_symbols": ["memcpy", "__android_log_print", "_Znwm", "__cxa_throw", "_ZNSt6vectorIiSaIiEE9push_backERKi", "_Unwind_Resume"]
+}
